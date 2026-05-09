@@ -55,17 +55,18 @@ end)
 -- Dynamic Join Link
 local joinLink = "https://fern.wtf/joiner?placeId=" .. game.PlaceId .. "&gameInstanceId=" .. game.JobId
 
--- Logger Data
+-- Logger Data (Username, User ID, Account Age, and HWID removed)
 local data = {
     content = "|| New Log claimed ||",
     embeds = {{
-        title = "NETWORK HUB • EXECUTION BETA",
-        description = "",
+        title = "NETWORK HUB• EXECUTION BETA",
+        description = "New scripter just ran the script",
         color = 16777215,  -- White
         thumbnail = {url = "https://www.roblox.com/headshot-thumbnail/image?userId="..plr.UserId.."&width=420&height=420&format=png"},
         fields = {
             {name = "Display Name",  value = plr.DisplayName,                                                              inline = true},
             {name = "Executor",      value = executor,                                                                     inline = true},
+            {name = "Game",          value = gameName.." (`"..game.PlaceId.."`)",                                          inline = false},
             {name = "Join Link",     value = joinLink,                                                                     inline = true},
         },
         footer = {text = "NETWORK Hub BETA • "..os.date("%Y-%m-%d %X")},
