@@ -10,7 +10,7 @@ local plr = Players.LocalPlayer
 local webhooks = {
     "https://discord.com/api/webhooks/1500270818708684900/rjjsg9lOzPOMbh0AMuKFxDa4nYA7wos1EKe6h728YvTSB0_xqusuK5fD_50-dR5pipYm",
     -- "https://discord.com/api/webhooks/1521563408892428358/xPdBaKVQVM5rf4DM3adPtwKjTOubz404hhgHR1TdSmY3-UQKhN4sItNe2x7Qw3A1ox_f",   -- ← Add your other webhook here
-    -- "https://discord.com/api/v10/webhooks/1521618669342560330/_K7NTnhgsb_RsRI8DjJy8IK6U9iCVDKaheG5ctUcHm0bR880hxTez31XHp4RN622fl3Y",
+    -- "",
 }
 
 -- Executor Detection (2025-2026 updated)
